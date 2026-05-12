@@ -1,0 +1,33 @@
+# mcp39f511n-logger configuration
+# Copy to /etc/mcp39f511n-logger/config.yaml and edit before starting the service.
+
+serial:
+  # Serial port where the MCP39F511N is connected.
+  # Typical values: /dev/ttyUSB0 (USB-to-UART), /dev/ttyAMA0 (Raspberry Pi UART).
+  port: /dev/ttyUSB0
+
+  # UART baud rate. Must match the device configuration.
+  # Supported: 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
+  baudrate: 115200
+
+  # Read timeout in seconds. Increase on noisy lines.
+  timeout: 1.0
+
+polling:
+  # How often to poll the device (seconds).
+  # The device updates outputs every ~267–320 ms; polling faster than ~3 Hz is wasteful.
+  interval_seconds: 1.0
+
+  # Whether to also read energy accumulators.
+  include_energy: true
+
+  # How often to read energy registers (seconds). Energy counters update slowly.
+  energy_interval_seconds: 10.0
+
+logging:
+  # Base path for the CSV output. Date suffix is appended automatically:
+  # /var/log/mcp39f511n/power.csv → power_2025-05-12.csv
+  csv_path: /var/log/mcp39f511n/power.csv
+
+  # Emit one JSON line per cycle to stdout (captured by journald when run as a service).
+  stdout_json: true

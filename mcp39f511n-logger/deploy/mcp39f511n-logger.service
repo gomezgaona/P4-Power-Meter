@@ -1,0 +1,24 @@
+[Unit]
+Description=MCP39F511N Dual-Channel Power Logger
+After=network.target
+
+[Service]
+Type=simple
+User=mcp39f511n
+Group=dialout
+ExecStart=/opt/mcp39f511n-logger/.venv/bin/mcp39f511n-logger --config /etc/mcp39f511n-logger/config.yaml
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mcp39f511n-logger
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/log/mcp39f511n
+
+[Install]
+WantedBy=multi-user.target
