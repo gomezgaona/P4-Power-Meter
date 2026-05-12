@@ -276,6 +276,9 @@ between polling cycles.
 > ```bash
 > mcp39f511n-logger --config config.yaml --enable-energy
 > ```
+> The counters increment proportionally to load. At small loads (< 10 W) it
+> may take several minutes before the first non-zero value appears. A load of
+> 50 W or more will show movement within seconds.
 
 ### Reading the example at a glance
 
