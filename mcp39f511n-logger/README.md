@@ -50,8 +50,8 @@ MCP39F511N GND         ──►  MCP2221 GND
 ## Quick Start (development)
 
 ```bash
-git clone https://github.com/<your-org>/mcp39f511n-logger.git
-cd mcp39f511n-logger
+git clone https://github.com/gomezgaona/P4-Power-Meter.git
+cd P4-Power-Meter/mcp39f511n-logger
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -88,8 +88,8 @@ Python ≥ 3.10 is required (`python3 --version`).
 ### 1 — Clone the repository
 
 ```bash
-git clone https://github.com/<your-org>/mcp39f511n-logger.git
-cd mcp39f511n-logger
+git clone https://github.com/gomezgaona/P4-Power-Meter.git
+cd P4-Power-Meter/mcp39f511n-logger
 ```
 
 ### 2 — Run the installer
