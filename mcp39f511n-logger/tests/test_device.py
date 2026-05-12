@@ -54,7 +54,7 @@ def test_read_registers_max_32_enforced():
 
 
 def test_write_registers_sends_frame_and_accepts_ack():
-    fs = FakeSerial(make_ack_response(b""))
+    fs = FakeSerial(bytes([0x06]))  # bare ACK — real device behaviour
     dev = _make_device(fs)
     dev.write_registers(0x00A0, b"\x00\x03\x00\x00")
     assert len(fs.written) > 0
@@ -178,8 +178,8 @@ def test_read_energy_values():
 def test_enable_energy_accumulation_sets_bits():
     """Verify that enable_energy_accumulation ORs in the ENERGY1/2 bits."""
     initial_cfg = struct.pack("<I", 0x0000_0000)
-    # Responses: 1) read sys_config, 2) write sys_config (ACK)
-    responses = make_ack_response(initial_cfg) + make_ack_response(b"")
+    # Responses: 1) read sys_config (full frame), 2) write sys_config (bare ACK)
+    responses = make_ack_response(initial_cfg) + bytes([0x06])
     fs = FakeSerial(responses)
     dev = _make_device(fs)
     dev.enable_energy_accumulation(save_to_flash=False)
@@ -192,7 +192,8 @@ def test_enable_energy_accumulation_sets_bits():
 def test_enable_energy_accumulation_with_flash():
     """Verify save_to_flash=True sends an extra CMD_SAVE_FLASH frame."""
     initial_cfg = struct.pack("<I", 0x0000_0000)
-    responses = make_ack_response(initial_cfg) + make_ack_response(b"") + make_ack_response(b"")
+    # read sys_config (full frame) + write sys_config (bare ACK) + save_flash (bare ACK)
+    responses = make_ack_response(initial_cfg) + bytes([0x06]) + bytes([0x06])
     fs = FakeSerial(responses)
     dev = _make_device(fs)
     dev.enable_energy_accumulation(save_to_flash=True)

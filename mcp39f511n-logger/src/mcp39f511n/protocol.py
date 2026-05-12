@@ -118,6 +118,10 @@ def read_response(transport: Transport, expected_data_bytes: int | None = None) 
     if code != ACK:
         raise FrameError(f"Unexpected response byte: 0x{code:02X}")
 
+    # Write commands receive a bare ACK with no following frame bytes
+    if expected_data_bytes == 0:
+        return b""
+
     # Second byte is num_bytes: ACK + length + data + checksum
     len_byte = transport.read(1)
     if not len_byte:

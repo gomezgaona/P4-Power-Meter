@@ -117,10 +117,17 @@ def test_build_save_flash_frame():
 
 
 def test_read_response_no_data():
-    """ACK with zero data bytes."""
+    """ACK with zero data bytes (full frame — read-command path)."""
     response = make_ack_response(b"")
     fs = FakeSerial(response)
     data = read_response(fs)
+    assert data == b""
+
+
+def test_read_response_bare_ack_for_write():
+    """Write commands receive a bare 0x06 with no following frame bytes."""
+    fs = FakeSerial(bytes([ACK]))
+    data = read_response(fs, expected_data_bytes=0)
     assert data == b""
 
 
