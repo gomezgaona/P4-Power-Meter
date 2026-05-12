@@ -170,12 +170,13 @@ logging:
 ## CLI Reference
 
 ```
-mcp39f511n-logger [--config PATH] [--once] [--verbose] [--dry-run]
+mcp39f511n-logger [--config PATH] [--once] [--verbose] [--dry-run] [--enable-energy]
 
-  --config PATH   Config file path (default: /etc/mcp39f511n-logger/config.yaml)
-  --once          Read one snapshot, print JSON to stdout, then exit
-  --verbose / -v  Enable DEBUG logging to stderr
-  --dry-run       Read measurements but do not write to the CSV file
+  --config PATH    Config file path (default: /etc/mcp39f511n-logger/config.yaml)
+  --once           Read one snapshot, print JSON to stdout, then exit
+  --verbose / -v   Enable DEBUG logging to stderr
+  --dry-run        Read measurements but do not write to the CSV file
+  --enable-energy  Enable energy accumulation on the device (saves to flash), then exit
 ```
 
 ---
@@ -270,10 +271,11 @@ between polling cycles.
 | `export_energy_active_1` | u64 | Total active energy exported (generated/fed back) on channel 1. |
 | `export_energy_active_2` | u64 | Same for channel 2. |
 
-> Energy counting must be enabled once after every power cycle of the
-> MCP39F511N. Call `dev.enable_energy_accumulation(save_to_flash=True)` via
-> the Python API (or rely on the systemd unit's `ExecStartPre` if configured)
-> to persist the setting across resets.
+> Energy counting must be enabled once. Run this command once per device to
+> turn it on and save it to flash so it survives power cycles:
+> ```bash
+> mcp39f511n-logger --config config.yaml --enable-energy
+> ```
 
 ### Reading the example at a glance
 

@@ -47,6 +47,11 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Read measurements but do not write the CSV",
     )
+    p.add_argument(
+        "--enable-energy",
+        action="store_true",
+        help="Enable energy accumulation on the device (saves to flash), then exit",
+    )
     return p.parse_args(argv)
 
 
@@ -74,6 +79,12 @@ def main(argv: list[str] | None = None) -> None:
 
     signal.signal(signal.SIGTERM, _handle_signal)
     signal.signal(signal.SIGINT, _handle_signal)
+
+    if args.enable_energy:
+        with MCP39F511N(cfg.serial.port, cfg.serial.baudrate, cfg.serial.timeout) as dev:
+            dev.enable_energy_accumulation(save_to_flash=True)
+        logger.info("Energy accumulation enabled and saved to flash.")
+        return
 
     if args.once:
         _run_once(cfg, csv_sink, json_sink, args.dry_run)
